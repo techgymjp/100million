@@ -82,20 +82,87 @@
     els.bestResult.textContent = text;
   }
 
-  // ---------- 効果音（紙をめくる音を WebAudio で合成） ----------
+  // ---------- 効果音（WebAudio で合成） ----------
   let audioCtx = null;
   let noiseBuffer = null;
+  let longNoiseBuffer = null;
+
+  function makeNoise(sec) {
+    const len = Math.floor(audioCtx.sampleRate * sec);
+    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    return buf;
+  }
 
   function initAudio() {
     if (audioCtx) return;
     const Ctx = window.AudioContext || window.webkitAudioContext;
     if (!Ctx) return;
     audioCtx = new Ctx();
-    const len = Math.floor(audioCtx.sampleRate * 0.08);
-    noiseBuffer = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
-    const data = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    noiseBuffer = makeNoise(0.08);
+    longNoiseBuffer = makeNoise(1.0);
   }
+
+  // ノイズを指定フィルタ・エンベロープで鳴らす
+  function noiseHit(start, dur, type, freq, q, peak) {
+    const src = audioCtx.createBufferSource();
+    src.buffer = longNoiseBuffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = type;
+    filter.frequency.value = freq;
+    filter.Q.value = q;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(peak, start + 0.004);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+    src.connect(filter).connect(gain).connect(audioCtx.destination);
+    src.start(start);
+    src.stop(start + dur + 0.02);
+  }
+
+  // 100枚ごとの「ガシャーン」（お札を数える機械の作動音）
+  function playGasha() {
+    if (state.muted || !audioCtx) return;
+    const t = audioCtx.currentTime;
+
+    // ガシャ：機構がかみ合う連続クリック
+    [0, 0.035, 0.065, 0.09].forEach((d, i) => {
+      noiseHit(t + d, 0.05, 'bandpass', 1800 + i * 400, 2, 0.5);
+    });
+
+    // ドン：重い衝撃
+    noiseHit(t + 0.11, 0.18, 'lowpass', 900, 0.7, 0.9);
+    const thump = audioCtx.createOscillator();
+    const thumpGain = audioCtx.createGain();
+    thump.type = 'sine';
+    thump.frequency.setValueAtTime(150, t + 0.11);
+    thump.frequency.exponentialRampToValueAtTime(55, t + 0.3);
+    thumpGain.gain.setValueAtTime(0.0001, t + 0.11);
+    thumpGain.gain.exponentialRampToValueAtTime(0.6, t + 0.115);
+    thumpGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
+    thump.connect(thumpGain).connect(audioCtx.destination);
+    thump.start(t + 0.11);
+    thump.stop(t + 0.35);
+
+    // シャーン：金属の響き（非整数倍音）＋高域ノイズの余韻
+    const st = t + 0.12;
+    [620, 1180, 1730, 2470, 3340, 4410].forEach((f, i) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = f * (0.99 + Math.random() * 0.02);
+      const dur = 0.9 - i * 0.1;
+      gain.gain.setValueAtTime(0.0001, st);
+      gain.gain.exponentialRampToValueAtTime(0.07, st + 0.005);
+      gain.gain.exponentialRampToValueAtTime(0.0001, st + dur);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(st);
+      osc.stop(st + dur + 0.02);
+    });
+    noiseHit(st, 0.6, 'highpass', 5000, 0.7, 0.25);
+  }
+
 
   function playFlip() {
     if (state.muted || !audioCtx) return;
@@ -115,9 +182,9 @@
     src.stop(t + 0.08);
   }
 
-  function playChime(big) {
+  function playChime(big, delay = 0) {
     if (state.muted || !audioCtx) return;
-    const t = audioCtx.currentTime;
+    const t = audioCtx.currentTime + delay;
     const notes = big ? [784, 988, 1175, 1568] : [1175, 1568];
     notes.forEach((f, i) => {
       const osc = audioCtx.createOscillator();
@@ -207,10 +274,11 @@
       const idx = state.count / BUNDLE_SIZE - 1;
       bundleCells[idx].classList.add('filled');
       els.bundleCount.textContent = idx + 1;
+      playGasha();
       const isMilestone = state.count % (BUNDLE_SIZE * 10) === 0;
       if (isMilestone && state.count < TOTAL) {
         toast(`${formatMoneyJa(state.count * BILL_VALUE)} 突破！`);
-        playChime(false);
+        playChime(false, 0.35);
       }
     }
 
@@ -281,7 +349,7 @@
     if (shareUrl) params.set('url', shareUrl);
     els.shareBtn.href = 'https://x.com/intent/post?' + params.toString();
 
-    playChime(true);
+    playChime(true, 0.35);
     setTimeout(() => els.resultOverlay.classList.remove('hidden'), 500);
   }
 
