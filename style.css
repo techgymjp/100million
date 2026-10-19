@@ -398,16 +398,52 @@ kbd {
 }
 .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #7a5a1e; }
 
-.btn-sub {
-  background: #222;
-  box-shadow: 0 3px 0 #000;
-}
-
 .btn-row {
   display: flex;
   gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.share { margin: 0 0 18px; }
+
+.share-label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #5a5040;
+  letter-spacing: 0.1em;
+}
+
+.share-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.share-btn:active { transform: translateY(1px); }
+.share-x { background: #000; }
+.share-line { background: #06c755; }
+.share-fb { background: #1877f2; }
+.share-copy { background: #6b6252; font-size: 12px; }
+
+@media (max-width: 360px) {
+  .share-row { grid-template-columns: repeat(2, 1fr); }
 }
 
 .result-sub { margin: 0; color: #6b4a1f; font-weight: 700; }

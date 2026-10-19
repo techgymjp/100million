@@ -6,6 +6,7 @@
   const BUNDLE_SIZE = 100;      // 1束（100万円）あたりの枚数
   const MAX_FLYING = 14;        // 同時に表示する飛んでいくお札の上限
   const BEST_KEY = '100million.best';
+  const SHARE_URL = 'https://techgym.jp/column/claude-code-game-100million/';
 
   const $ = (id) => document.getElementById(id);
   const els = {
@@ -30,7 +31,10 @@
     resultRank: $('resultRank'),
     bestResult: $('bestResult'),
     retryBtn: $('retryBtn'),
-    shareBtn: $('shareBtn'),
+    shareX: $('shareX'),
+    shareLine: $('shareLine'),
+    shareFb: $('shareFb'),
+    shareCopy: $('shareCopy'),
     muteBtn: $('muteBtn'),
   };
 
@@ -343,14 +347,35 @@
     els.resultDetail.textContent = `平均 ${(TOTAL / (elapsed / 1000)).toFixed(2)} 枚/秒`;
     els.resultRank.textContent = (isNewBest && prevBest ? '自己ベスト更新！ ' : '') + rankFor(elapsed / 1000);
 
-    const shareText = `1万円札を1万枚めくって、1億円を ${formatTime(elapsed)} で数えきりました！ #1億円ゲーム`;
-    const shareUrl = location.protocol.startsWith('http') ? location.href.split('#')[0] : '';
-    const params = new URLSearchParams({ text: shareText });
-    if (shareUrl) params.set('url', shareUrl);
-    els.shareBtn.href = 'https://x.com/intent/post?' + params.toString();
+    setShareLinks(`1万円札を1万枚めくって、1億円を ${formatTime(elapsed)} で数えきりました！ #1億円ゲーム`);
 
     playChime(true, 0.35);
     setTimeout(() => els.resultOverlay.classList.remove('hidden'), 500);
+  }
+
+  let shareText = '';
+  function setShareLinks(text) {
+    shareText = text;
+    const enc = encodeURIComponent;
+    els.shareX.href = `https://x.com/intent/post?text=${enc(text)}&url=${enc(SHARE_URL)}`;
+    els.shareLine.href = `https://social-plugins.line.me/lineit/share?url=${enc(SHARE_URL)}&text=${enc(text)}`;
+    els.shareFb.href = `https://www.facebook.com/sharer/sharer.php?u=${enc(SHARE_URL)}`;
+    els.shareCopy.textContent = 'コピー';
+  }
+
+  async function copyShare() {
+    const body = `${shareText}\n${SHARE_URL}`;
+    try {
+      await navigator.clipboard.writeText(body);
+    } catch (_) {
+      const ta = document.createElement('textarea');
+      ta.value = body;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    els.shareCopy.textContent = 'コピーしました';
   }
 
   function reset() {
@@ -419,6 +444,7 @@
 
   els.startBtn.addEventListener('click', start);
   els.retryBtn.addEventListener('click', start);
+  els.shareCopy.addEventListener('click', copyShare);
 
   els.muteBtn.addEventListener('click', () => {
     state.muted = !state.muted;
