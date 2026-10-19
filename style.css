@@ -181,25 +181,6 @@ body {
   pointer-events: none;
 }
 
-/* 見本表示（実物と誤認されないように） */
-.sample {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) rotate(-18deg);
-  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
-  font-weight: 700;
-  font-size: calc(var(--bill-w) * 0.15);
-  letter-spacing: 0.2em;
-  color: #c0392b;
-  border: calc(var(--bill-w) * 0.008) solid #c0392b;
-  padding: 0 0.15em 0 0.35em;
-  border-radius: 6px;
-  pointer-events: none;
-  line-height: 1.2;
-  opacity: 0.35;
-}
-
 .stack.press .bill { transform: translateY(1px) scale(0.995); }
 
 .hint {
