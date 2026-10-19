@@ -36,6 +36,7 @@
     shareFb: $('shareFb'),
     shareCopy: $('shareCopy'),
     muteBtn: $('muteBtn'),
+    rotateSkip: $('rotateSkip'),
   };
 
   const state = {
@@ -393,7 +394,22 @@
     renderCount();
   }
 
+  // スマホでは全画面＋横向き固定を試みる（対応ブラウザのみ。iOS Safari などは無視される）
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
+  function enterLandscape() {
+    if (!isTouch || document.body.classList.contains('portrait-ok')) return;
+    const el = document.documentElement;
+    const req = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (!req || document.fullscreenElement) return;
+    try {
+      Promise.resolve(req.call(el))
+        .then(() => screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape'))
+        .catch(() => { /* noop */ });
+    } catch (_) { /* noop */ }
+  }
+
   function start() {
+    enterLandscape();
     initAudio();
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     reset();
@@ -445,6 +461,8 @@
   els.startBtn.addEventListener('click', start);
   els.retryBtn.addEventListener('click', start);
   els.shareCopy.addEventListener('click', copyShare);
+
+  els.rotateSkip.addEventListener('click', () => document.body.classList.add('portrait-ok'));
 
   els.muteBtn.addEventListener('click', () => {
     state.muted = !state.muted;
