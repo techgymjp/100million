@@ -598,3 +598,45 @@ kbd {
   .share-btn { min-height: 38px; }
   .btn { padding: 10px 24px; }
 }
+
+/* ---------- 共通・アプリ版 ---------- */
+.hidden { display: none !important; }
+
+body.native .web-only,
+body.native .rotate-hint { display: none !important; }
+
+.share-native {
+  width: 100%;
+  background: #6b4a1f;
+  font-size: 15px;
+}
+
+.btn-quiet {
+  background: #8a8170;
+  box-shadow: 0 3px 0 #5a5346;
+}
+
+.pause-title { font-size: 28px !important; }
+
+.legal {
+  margin: 14px 0 0;
+  font-size: 11px;
+  color: #8a8170;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.legal a,
+.link-btn {
+  color: #6b4a1f;
+  text-decoration: underline;
+}
+.link-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}

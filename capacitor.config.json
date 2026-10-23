@@ -1,0 +1,8 @@
+{
+  "appId": "jp.techgym.ichiokuen",
+  "appName": "1億円",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#1d2a22"
+  }
+}

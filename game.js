@@ -8,6 +8,11 @@
   const BEST_KEY = '100million.best';
   const SHARE_URL = 'https://techgym.jp/column/claude-code-game-100million/';
 
+  // Android アプリ（Capacitor）で動いているか
+  const NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  const plugin = (name) => (NATIVE && window.Capacitor.Plugins ? window.Capacitor.Plugins[name] : null);
+  if (NATIVE) document.body.classList.add('native');
+
   const $ = (id) => document.getElementById(id);
   const els = {
     money: $('money'),
@@ -37,10 +42,21 @@
     shareCopy: $('shareCopy'),
     muteBtn: $('muteBtn'),
     rotateSkip: $('rotateSkip'),
+    shareRow: $('shareRow'),
+    shareNative: $('shareNative'),
+    pauseOverlay: $('pauseOverlay'),
+    resumeBtn: $('resumeBtn'),
+    quitBtn: $('quitBtn'),
+    ruleTap: $('ruleTap'),
+    buildInfo: $('buildInfo'),
+    adPrivacy: $('adPrivacy'),
   };
 
   const state = {
     playing: false,   // スタート画面を閉じて操作を受け付けている
+    paused: false,
+    pausedAt: 0,
+    finishes: 0,      // クリアした回数（広告の頻度に使う）
     count: 0,
     startAt: 0,       // 最初の1枚をめくった時刻（0 なら未開始）
     endAt: 0,
@@ -108,6 +124,15 @@
     noiseBuffer = makeNoise(0.08);
     longNoiseBuffer = makeNoise(1.0);
   }
+
+  // 別アプリへの切り替えや広告の表示中は音を止める
+  function suspendAudio() {
+    if (audioCtx && audioCtx.state === 'running') audioCtx.suspend();
+  }
+  function resumeAudio() {
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  }
+  window.GameAudio = { suspend: suspendAudio, resume: resumeAudio };
 
   // ノイズを指定フィルタ・エンベロープで鳴らす
   function noiseHit(start, dur, type, freq, q, peak) {
@@ -257,7 +282,7 @@
 
   // ---------- ゲーム進行 ----------
   function flip() {
-    if (!state.playing || state.count >= TOTAL) return;
+    if (!state.playing || state.paused || state.count >= TOTAL) return;
 
     const now = performance.now();
     if (!state.startAt) {
@@ -333,6 +358,7 @@
   function finish(now) {
     state.endAt = now;
     state.playing = false;
+    state.finishes++;
     cancelAnimationFrame(state.rafId);
 
     const elapsed = state.endAt - state.startAt;
@@ -364,6 +390,15 @@
     els.shareCopy.textContent = 'コピー';
   }
 
+  // アプリでは Android の共有メニューを出す
+  async function nativeShare() {
+    const Share = plugin('Share');
+    if (!Share) return;
+    try {
+      await Share.share({ title: '1億円', text: shareText, url: SHARE_URL, dialogTitle: '結果をシェア' });
+    } catch (_) { /* キャンセル */ }
+  }
+
   async function copyShare() {
     const body = `${shareText}\n${SHARE_URL}`;
     try {
@@ -390,14 +425,14 @@
     els.bundleCount.textContent = '0';
     els.time.textContent = formatTime(0);
     els.speed.textContent = '0.0';
-    els.hint.textContent = 'お札をタップ / クリック、またはスペースキーでめくる';
+    els.hint.textContent = NATIVE ? 'お札をタップしてめくる' : 'お札をタップ / クリック、またはスペースキーでめくる';
     renderCount();
   }
 
   // スマホでは全画面＋横向き固定を試みる（対応ブラウザのみ。iOS Safari などは無視される）
   const isTouch = window.matchMedia('(pointer: coarse)').matches;
   function enterLandscape() {
-    if (!isTouch || document.body.classList.contains('portrait-ok')) return;
+    if (NATIVE || !isTouch || document.body.classList.contains('portrait-ok')) return;
     const el = document.documentElement;
     const req = el.requestFullscreen || el.webkitRequestFullscreen;
     if (!req || document.fullscreenElement) return;
@@ -411,16 +446,53 @@
   function start() {
     enterLandscape();
     initAudio();
-    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    resumeAudio();
     reset();
     els.startOverlay.classList.add('hidden');
     els.resultOverlay.classList.add('hidden');
+    els.pauseOverlay.classList.add('hidden');
     state.playing = true;
+    state.paused = false;
+    els.stack.focus({ preventScroll: true });
+  }
+
+  // 結果画面の「もう一度」：アプリでは 2 回に 1 回、全画面広告を挟む
+  async function retry() {
+    if (window.Ads && Ads.available && state.finishes % 2 === 0) {
+      els.retryBtn.disabled = true;
+      await Ads.showInterstitial();
+      els.retryBtn.disabled = false;
+    }
+    start();
+  }
+
+  // 一時停止中はタイマーを止め、再開時にその分だけ開始時刻をずらす
+  function pause() {
+    if (!state.playing || state.paused) return;
+    state.paused = true;
+    state.pausedAt = performance.now();
+    cancelAnimationFrame(state.rafId);
+    suspendAudio();
+    els.pauseOverlay.classList.remove('hidden');
+  }
+
+  function resume() {
+    if (!state.paused) return;
+    state.paused = false;
+    if (state.startAt) {
+      state.startAt += performance.now() - state.pausedAt;
+      state.recent = [];
+      loop();
+    }
+    resumeAudio();
+    els.pauseOverlay.classList.add('hidden');
     els.stack.focus({ preventScroll: true });
   }
 
   function backToTitle() {
     state.playing = false;
+    state.paused = false;
+    els.pauseOverlay.classList.add('hidden');
     reset();
     renderBest();
     els.resultOverlay.classList.add('hidden');
@@ -459,8 +531,31 @@
   els.stack.addEventListener('contextmenu', (e) => e.preventDefault());
 
   els.startBtn.addEventListener('click', start);
-  els.retryBtn.addEventListener('click', start);
+  els.retryBtn.addEventListener('click', retry);
   els.shareCopy.addEventListener('click', copyShare);
+  els.shareNative.addEventListener('click', nativeShare);
+  els.resumeBtn.addEventListener('click', resume);
+  els.quitBtn.addEventListener('click', backToTitle);
+
+  // 別アプリやタブに切り替えたら自動で一時停止する
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      pause();
+      suspendAudio();
+    } else if (!state.paused && !(window.Ads && Ads.showing)) {
+      resumeAudio();
+    }
+  });
+
+  // Android の戻るボタン：プレイ中は一時停止（一時停止中は再開）、タイトルや結果画面ではアプリを終了
+  if (plugin('App')) {
+    plugin('App').addListener('backButton', () => {
+      if (window.Ads && Ads.showing) return;
+      if (state.paused) resume();
+      else if (state.playing) pause();
+      else plugin('App').exitApp();
+    });
+  }
 
   els.rotateSkip.addEventListener('click', () => document.body.classList.add('portrait-ok'));
 
@@ -471,6 +566,17 @@
   });
 
   // ---------- 初期化 ----------
+  if (NATIVE) {
+    els.ruleTap.textContent = 'お札をタップして1枚めくる';
+    els.shareRow.classList.add('hidden');
+    els.shareNative.classList.remove('hidden');
+  }
+  if (window.APP_VERSION && window.APP_VERSION !== 'dev') els.buildInfo.textContent = window.APP_VERSION;
+  if (window.Ads) {
+    Ads.initDone.then(() => { if (Ads.privacyOptionsRequired) els.adPrivacy.classList.remove('hidden'); });
+    els.adPrivacy.addEventListener('click', () => Ads.showPrivacyOptions());
+  }
+
   buildBundles();
   renderBest();
   reset();
