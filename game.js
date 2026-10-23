@@ -98,7 +98,7 @@
 
   function renderBest() {
     const best = loadBest();
-    const text = best ? `自己ベスト：${formatTime(best)}` : '';
+    const text = best ? I18N.t('best', { t: formatTime(best) }) : '';
     els.bestStart.textContent = text;
     els.bestResult.textContent = text;
   }
@@ -287,7 +287,7 @@
     const now = performance.now();
     if (!state.startAt) {
       state.startAt = now;
-      els.hint.textContent = 'その調子！ どんどんめくろう';
+      setHint('hint.go');
       loop();
     }
 
@@ -307,7 +307,9 @@
       playGasha();
       const isMilestone = state.count % (BUNDLE_SIZE * 10) === 0;
       if (isMilestone && state.count < TOTAL) {
-        toast(`${formatMoneyJa(state.count * BILL_VALUE)} 突破！`);
+        toast(I18N.lang === 'ja'
+          ? `${formatMoneyJa(state.count * BILL_VALUE)} 突破！`
+          : `${yen(state.count * BILL_VALUE)} reached!`);
         playChime(false, 0.35);
       }
     }
@@ -348,11 +350,11 @@
   }
 
   function rankFor(sec) {
-    if (sec < 600) return '伝説の札勘マスター';
-    if (sec < 900) return '銀行窓口のエース';
-    if (sec < 1200) return '敏腕経理';
-    if (sec < 1800) return '堅実な会計係';
-    return '1億円、確かに数えました';
+    if (sec < 600) return I18N.t('rank.0');
+    if (sec < 900) return I18N.t('rank.1');
+    if (sec < 1200) return I18N.t('rank.2');
+    if (sec < 1800) return I18N.t('rank.3');
+    return I18N.t('rank.4');
   }
 
   function finish(now) {
@@ -371,10 +373,10 @@
     renderBest();
 
     els.resultTime.textContent = formatTime(elapsed);
-    els.resultDetail.textContent = `平均 ${(TOTAL / (elapsed / 1000)).toFixed(2)} 枚/秒`;
-    els.resultRank.textContent = (isNewBest && prevBest ? '自己ベスト更新！ ' : '') + rankFor(elapsed / 1000);
+    els.resultDetail.textContent = I18N.t('result.avg', { v: (TOTAL / (elapsed / 1000)).toFixed(2) });
+    els.resultRank.textContent = (isNewBest && prevBest ? I18N.t('result.newBest') : '') + rankFor(elapsed / 1000);
 
-    setShareLinks(`1万円札を1万枚めくって、1億円を ${formatTime(elapsed)} で数えきりました！ #1億円ゲーム`);
+    setShareLinks(I18N.t('share.text', { t: formatTime(elapsed) }));
 
     playChime(true, 0.35);
     setTimeout(() => els.resultOverlay.classList.remove('hidden'), 500);
@@ -387,7 +389,7 @@
     els.shareX.href = `https://x.com/intent/post?text=${enc(text)}&url=${enc(SHARE_URL)}`;
     els.shareLine.href = `https://social-plugins.line.me/lineit/share?url=${enc(SHARE_URL)}&text=${enc(text)}`;
     els.shareFb.href = `https://www.facebook.com/sharer/sharer.php?u=${enc(SHARE_URL)}`;
-    els.shareCopy.textContent = 'コピー';
+    els.shareCopy.textContent = I18N.t('share.copy');
   }
 
   // アプリでは Android の共有メニューを出す
@@ -395,7 +397,7 @@
     const Share = plugin('Share');
     if (!Share) return;
     try {
-      await Share.share({ title: '1億円', text: shareText, url: SHARE_URL, dialogTitle: '結果をシェア' });
+      await Share.share({ title: I18N.t('share.title'), text: shareText, url: SHARE_URL, dialogTitle: I18N.t('share.dialog') });
     } catch (_) { /* キャンセル */ }
   }
 
@@ -411,7 +413,13 @@
       document.execCommand('copy');
       ta.remove();
     }
-    els.shareCopy.textContent = 'コピーしました';
+    els.shareCopy.textContent = I18N.t('share.copied');
+  }
+
+  // ヒントは言語を切り替えたときに書き直せるよう、キーで持つ
+  function setHint(key) {
+    els.hint.dataset.i18n = key;
+    els.hint.textContent = I18N.t(key);
   }
 
   function reset() {
@@ -425,7 +433,7 @@
     els.bundleCount.textContent = '0';
     els.time.textContent = formatTime(0);
     els.speed.textContent = '0.0';
-    els.hint.textContent = NATIVE ? 'お札をタップしてめくる' : 'お札をタップ / クリック、またはスペースキーでめくる';
+    setHint(NATIVE ? 'hint.app' : 'hint.web');
     renderCount();
   }
 
@@ -567,7 +575,7 @@
 
   // ---------- 初期化 ----------
   if (NATIVE) {
-    els.ruleTap.textContent = 'お札をタップして1枚めくる';
+    els.ruleTap.dataset.i18nHtml = 'rule.tapApp';
     els.shareRow.classList.add('hidden');
     els.shareNative.classList.remove('hidden');
   }
@@ -576,6 +584,12 @@
     Ads.initDone.then(() => { if (Ads.privacyOptionsRequired) els.adPrivacy.classList.remove('hidden'); });
     els.adPrivacy.addEventListener('click', () => Ads.showPrivacyOptions());
   }
+
+  document.querySelectorAll('[data-lang]').forEach((btn) => {
+    btn.addEventListener('click', () => I18N.setLang(btn.dataset.lang));
+  });
+  I18N.onChange(renderBest);
+  I18N.apply();
 
   buildBundles();
   renderBest();

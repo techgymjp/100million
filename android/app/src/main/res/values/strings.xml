@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">1億円</string>
-    <string name="title_activity_main">1億円</string>
+    <string name="app_name">100 Million Yen</string>
+    <string name="title_activity_main">100 Million Yen</string>
     <string name="package_name">jp.techgym.ichiokuen</string>
     <string name="custom_url_scheme">jp.techgym.ichiokuen</string>
     <!-- Google AdMob のアプリ ID。本番のアプリ ID を受け取るまでは Google 公式のテスト用 ID -->

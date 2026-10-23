@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <!-- 端末の言語が日本語のときのアプリ名 -->
+    <string name="app_name">1億円</string>
+    <string name="title_activity_main">1億円</string>
+</resources>

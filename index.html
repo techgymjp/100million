@@ -9,26 +9,26 @@
 </head>
 <body>
   <header class="header">
-    <h1 class="title">1億円</h1>
-    <button id="muteBtn" class="icon-btn" type="button" aria-label="効果音のオン/オフ">🔊</button>
+    <h1 class="title" data-i18n="title">1億円</h1>
+    <button id="muteBtn" class="icon-btn" type="button" data-i18n-aria="aria.mute" aria-label="効果音のオン/オフ">🔊</button>
   </header>
 
   <section class="stats" aria-live="off">
     <div class="stat">
-      <div class="stat-label">金額</div>
+      <div class="stat-label" data-i18n="stat.money">金額</div>
       <div class="stat-value money" id="money">¥0</div>
     </div>
     <div class="stat">
-      <div class="stat-label">枚数</div>
-      <div class="stat-value"><span id="count">0</span><small> / 10,000枚</small></div>
+      <div class="stat-label" data-i18n="stat.count">枚数</div>
+      <div class="stat-value"><span id="count">0</span><small data-i18n="stat.countOf"> / 10,000枚</small></div>
     </div>
     <div class="stat">
-      <div class="stat-label">タイム</div>
+      <div class="stat-label" data-i18n="stat.time">タイム</div>
       <div class="stat-value" id="time">0:00.00</div>
     </div>
     <div class="stat">
-      <div class="stat-label">速度</div>
-      <div class="stat-value"><span id="speed">0.0</span><small> 枚/秒</small></div>
+      <div class="stat-label" data-i18n="stat.speed">速度</div>
+      <div class="stat-value"><span id="speed">0.0</span><small data-i18n="stat.speedUnit"> 枚/秒</small></div>
     </div>
   </section>
 
@@ -36,13 +36,13 @@
 
   <main class="table" id="table">
     <div class="stack-area">
-      <div class="stack" id="stack" role="button" tabindex="0" aria-label="お札をめくる">
+      <div class="stack" id="stack" role="button" tabindex="0" data-i18n-aria="aria.stack" aria-label="お札をめくる">
         <div class="stack-shadow s3"></div>
         <div class="stack-shadow s2"></div>
         <div class="stack-shadow s1"></div>
         <div class="bill" id="topBill">
-          <img src="images/10000yen.jpg" alt="1万円札" draggable="false">
-          <span class="sample">見本</span>
+          <img src="images/10000yen.jpg" data-i18n-alt="alt.bill" alt="1万円札" draggable="false">
+          <span class="sample" data-i18n="sample">見本</span>
         </div>
       </div>
       <p class="hint" id="hint">お札をタップ / クリック、またはスペースキーでめくる</p>
@@ -53,8 +53,8 @@
 
   <section class="bundles">
     <div class="bundles-head">
-      <span>帯封（100万円束）</span>
-      <span><b id="bundleCount">0</b> / 100束</span>
+      <span data-i18n="bundles.label">帯封（100万円束）</span>
+      <span><b id="bundleCount">0</b><span data-i18n="bundles.of"> / 100束</span></span>
     </div>
     <div class="bundle-grid" id="bundleGrid"></div>
   </section>
@@ -62,27 +62,31 @@
   <!-- 縦向きスマホ向け：横向きのすすめ -->
   <div class="rotate-hint" id="rotateHint">
     <div class="rotate-phone" aria-hidden="true"><span></span></div>
-    <p>スマホを<b>横向き</b>にすると<br>お札が大きくなって迫力アップ！</p>
-    <button class="rotate-skip" id="rotateSkip" type="button">縦のまま遊ぶ</button>
+    <p data-i18n-html="rotate.text">スマホを<b>横向き</b>にすると<br>お札が大きくなって迫力アップ！</p>
+    <button class="rotate-skip" id="rotateSkip" type="button" data-i18n="rotate.skip">縦のまま遊ぶ</button>
   </div>
 
   <!-- スタート画面 -->
   <div class="overlay" id="startOverlay">
     <div class="panel">
-      <h2>1億円</h2>
-      <p class="lead">1万円札を<b>1万枚</b>めくって、<br>1億円を数えきるタイムを競おう。</p>
+      <h2 data-i18n="title">1億円</h2>
+      <p class="lead" data-i18n-html="start.lead">1万円札を<b>1万枚</b>めくって、<br>1億円を数えきるタイムを競おう。</p>
       <ul class="rules">
-        <li id="ruleTap">お札をタップ / クリック、または <kbd>Space</kbd> <kbd>Enter</kbd> <kbd>F</kbd> <kbd>J</kbd> キーで1枚めくる</li>
-        <li>最初の1枚をめくった瞬間にタイマースタート</li>
-        <li class="web-only">キーの押しっぱなし（連打機能）は無効</li>
-        <li class="web-only"><kbd>Esc</kbd> でやり直し</li>
+        <li id="ruleTap" data-i18n-html="rule.tap">お札をタップ / クリック、または <kbd>Space</kbd> <kbd>Enter</kbd> <kbd>F</kbd> <kbd>J</kbd> キーで1枚めくる</li>
+        <li data-i18n="rule.timer">最初の1枚をめくった瞬間にタイマースタート</li>
+        <li class="web-only" data-i18n="rule.repeat">キーの押しっぱなし（連打機能）は無効</li>
+        <li class="web-only" data-i18n-html="rule.esc"><kbd>Esc</kbd> でやり直し</li>
       </ul>
       <p class="best" id="bestStart"></p>
-      <button class="btn" id="startBtn" type="button">スタート</button>
+      <button class="btn" id="startBtn" type="button" data-i18n="start.btn">スタート</button>
       <p class="legal">
-        <a href="https://techgym.jp/privacy-policy/" target="_blank" rel="noopener">プライバシーポリシー</a>
-        <button class="link-btn hidden" id="adPrivacy" type="button">広告の設定</button>
+        <a href="https://techgym.jp/privacy-policy/" data-i18n-href="url.privacy" data-i18n="legal.privacy" target="_blank" rel="noopener">プライバシーポリシー</a>
+        <button class="link-btn hidden" id="adPrivacy" type="button" data-i18n="legal.adSettings">広告の設定</button>
         <span class="build-info" id="buildInfo"></span>
+      </p>
+      <p class="lang-sel">
+        <button class="lang-btn" type="button" data-lang="ja">日本語</button>
+        <button class="lang-btn" type="button" data-lang="en">English</button>
       </p>
     </div>
   </div>
@@ -90,11 +94,11 @@
   <!-- 一時停止 -->
   <div class="overlay hidden" id="pauseOverlay">
     <div class="panel">
-      <h2 class="pause-title">一時停止中</h2>
-      <p class="lead">タイマーは止まっています。</p>
+      <h2 class="pause-title" data-i18n="pause.title">一時停止中</h2>
+      <p class="lead" data-i18n="pause.lead">タイマーは止まっています。</p>
       <div class="btn-row">
-        <button class="btn" id="resumeBtn" type="button">再開</button>
-        <button class="btn btn-quiet" id="quitBtn" type="button">タイトルへ</button>
+        <button class="btn" id="resumeBtn" type="button" data-i18n="pause.resume">再開</button>
+        <button class="btn btn-quiet" id="quitBtn" type="button" data-i18n="pause.quit">タイトルへ</button>
       </div>
     </div>
   </div>
@@ -102,29 +106,30 @@
   <!-- クリア画面 -->
   <div class="overlay hidden" id="resultOverlay">
     <div class="panel">
-      <p class="result-sub">1億円 数えきりました！</p>
+      <p class="result-sub" data-i18n="result.sub">1億円 数えきりました！</p>
       <div class="result-time" id="resultTime">0:00.00</div>
       <p class="result-detail" id="resultDetail"></p>
       <p class="result-rank" id="resultRank"></p>
       <p class="best" id="bestResult"></p>
       <div class="share">
-        <p class="share-label">結果をシェアする</p>
+        <p class="share-label" data-i18n="share.label">結果をシェアする</p>
         <div class="share-row" id="shareRow">
           <a class="share-btn share-x" id="shareX" href="#" target="_blank" rel="noopener">X</a>
           <a class="share-btn share-line" id="shareLine" href="#" target="_blank" rel="noopener">LINE</a>
           <a class="share-btn share-fb" id="shareFb" href="#" target="_blank" rel="noopener">Facebook</a>
-          <button class="share-btn share-copy" id="shareCopy" type="button">コピー</button>
+          <button class="share-btn share-copy" id="shareCopy" type="button" data-i18n="share.copy">コピー</button>
         </div>
-        <button class="share-btn share-native hidden" id="shareNative" type="button">結果をシェアする</button>
+        <button class="share-btn share-native hidden" id="shareNative" type="button" data-i18n="share.native">結果をシェアする</button>
       </div>
       <div class="btn-row">
-        <button class="btn" id="retryBtn" type="button">もう一度</button>
+        <button class="btn" id="retryBtn" type="button" data-i18n="retry">もう一度</button>
       </div>
     </div>
   </div>
 
-  <footer class="footer">※ 画面上のお札は見本です。</footer>
+  <footer class="footer" data-i18n="footer">※ 画面上のお札は見本です。</footer>
 
+  <script src="js/i18n.js"></script>
   <script src="js/build-info.js"></script>
   <script src="js/ads-config.js"></script>
   <script src="js/ads.js"></script>

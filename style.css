@@ -640,3 +640,41 @@ body.native .rotate-hint { display: none !important; }
   font: inherit;
   cursor: pointer;
 }
+
+/* ---------- 言語切り替え ---------- */
+.lang-sel {
+  margin: 10px 0 0;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.lang-btn {
+  background: transparent;
+  border: 1px solid #c9bda4;
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-family: inherit;
+  font-size: 12px;
+  color: #6b6252;
+  cursor: pointer;
+}
+.lang-btn.on {
+  background: #6b4a1f;
+  border-color: #6b4a1f;
+  color: #fff;
+}
+
+/* 英語表示：長い文字列に合わせて詰める */
+html[lang="en"] .title { letter-spacing: 0.04em; }
+html[lang="en"] .panel h2 { font-size: 32px; letter-spacing: 0.04em; }
+html[lang="en"] .sample {
+  font-size: calc(var(--bill-w) * 0.09);
+  letter-spacing: 0.08em;
+  padding: 0 0.1em 0 0.18em;
+}
+
+@media (orientation: landscape) and (max-height: 540px) {
+  html[lang="en"] .title { font-size: 17px; letter-spacing: 0; }
+  html[lang="en"] .panel h2 { font-size: 24px; }
+}

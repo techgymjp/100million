@@ -11,6 +11,7 @@
 - 別のアプリやタブに切り替えると自動で一時停止（タイマーも止まる）
 - `Esc` でタイトルに戻る
 - 自己ベストは端末（localStorage）に保存されます
+- 日本語と英語に対応（端末の言語で自動選択。タイトル画面で切り替え可能）
 
 ## Web 版
 
@@ -22,6 +23,7 @@ Vercel では `vercel.json` の設定で `npm run build` を実行し、`www/` �
 [Capacitor](https://capacitorjs.com/) でゲームのファイルをアプリに同梱しています（オフラインで遊べます）。
 
 - パッケージ名：`jp.techgym.ichiokuen`
+- アプリ名：日本語の端末では「1億円」、それ以外では「100 Million Yen」
 - 画面の向き：横画面（`sensorLandscape`）。システムバーを隠した全画面で、プレイ中は画面が消えない
 - 戻るボタン：プレイ中は一時停止（一時停止中は再開）、タイトルや結果画面ではアプリを終了
 - シェア：Android の共有メニュー
@@ -58,6 +60,7 @@ npm run android:open
 index.html             画面構成
 style.css              スタイル・めくりアニメーション・横向きレイアウト
 game.js                ゲームロジック（タイマー、カウント、効果音、記録保存、一時停止、アプリ連携）
+js/i18n.js             表示言語（日本語 / 英語）の文言と切り替え
 images/10000yen.jpg    1万円札の画像
 js/ads.js              AdMob 広告（Android アプリのときだけ動く）
 js/ads-config.js       広告のモード（ビルド時に生成）
