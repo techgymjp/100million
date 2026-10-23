@@ -41,7 +41,7 @@ GitHub Actions（`.github/workflows/android.yml`）でビルドします。
 2. 既定ブランチのビルドは、Release `android-latest` の `ichiokuen.apk` を差し替える（動作確認用。デバッグ署名・テスト広告）
 3. GitHub Secrets に署名鍵が登録されていれば、本番広告で署名付き AAB（Google Play 用）を作り、Artifact に上げる
 
-動作確認用 APK：`https://github.com/techgymjp/100million/releases/latest/download/ichiokuen.apk`（`docs/apk-qr.png` の QR コード）
+動作確認用 APK：`https://github.com/techgymjp/100million/releases/latest/download/ichiokuen.apk`（`docs/apk-qr.png` の QR コード）。リリース画面 `https://github.com/techgymjp/100million/releases/latest` の QR コードは `docs/release-qr.png`
 
 手元でビルドする場合（Android Studio が必要）：
 
