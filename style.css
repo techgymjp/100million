@@ -678,3 +678,39 @@ html[lang="en"] .sample {
   html[lang="en"] .title { font-size: 17px; letter-spacing: 0; }
   html[lang="en"] .panel h2 { font-size: 24px; }
 }
+
+/* ---------- 広告 ---------- */
+/* バナーが出ているあいだは、画面の下端がバナーに隠れないようにする */
+.overlay { padding-bottom: calc(16px + var(--banner-h, 0px)); }
+@media (orientation: landscape) and (max-height: 540px) {
+  .overlay { padding-bottom: calc(10px + var(--banner-h, 0px)); }
+}
+
+.btn-reward {
+  background: linear-gradient(180deg, #4d6b57, #2f4a39);
+  box-shadow: 0 3px 0 #1d2a22;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+.btn-reward:active { box-shadow: 0 1px 0 #1d2a22; }
+.btn-reward:disabled { opacity: 0.7; cursor: default; }
+
+/* リワード広告のごほうび：金のお札（見た目だけ。タイムには影響しない） */
+.table.gold .bill img {
+  filter: sepia(1) saturate(2.4) hue-rotate(-14deg) brightness(0.98) contrast(1.1);
+}
+.table.gold .bill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 30%, #fff6d080 45%, transparent 60%);
+  background-size: 250% 100%;
+  animation: shine 2.4s linear infinite;
+  pointer-events: none;
+}
+.table.gold .stack-shadow { background: #d9b25a; box-shadow: 0 1px 0 #a87d2c; }
+
+@keyframes shine {
+  from { background-position: 150% 0; }
+  to { background-position: -100% 0; }
+}

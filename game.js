@@ -50,6 +50,10 @@
     ruleTap: $('ruleTap'),
     buildInfo: $('buildInfo'),
     adPrivacy: $('adPrivacy'),
+    table: $('table'),
+    rewardStartBtn: $('rewardStartBtn'),
+    rewardResultBtn: $('rewardResultBtn'),
+    titleBtn: $('titleBtn'),
   };
 
   const state = {
@@ -57,6 +61,8 @@
     paused: false,
     pausedAt: 0,
     finishes: 0,      // クリアした回数（広告の頻度に使う）
+    goldNext: false,  // リワード広告を見た：次の 1 回は金のお札で遊べる
+    skipInterstitial: false,
     count: 0,
     startAt: 0,       // 最初の1枚をめくった時刻（0 なら未開始）
     endAt: 0,
@@ -377,9 +383,13 @@
     els.resultRank.textContent = (isNewBest && prevBest ? I18N.t('result.newBest') : '') + rankFor(elapsed / 1000);
 
     setShareLinks(I18N.t('share.text', { t: formatTime(elapsed) }));
+    renderRewardButtons();
 
     playChime(true, 0.35);
-    setTimeout(() => els.resultOverlay.classList.remove('hidden'), 500);
+    setTimeout(() => {
+      els.resultOverlay.classList.remove('hidden');
+      updateBanner();
+    }, 500);
   }
 
   let shareText = '';
@@ -461,17 +471,73 @@
     els.pauseOverlay.classList.add('hidden');
     state.playing = true;
     state.paused = false;
+    // 金のお札はリワード広告を見たあとの 1 回だけ
+    const gold = state.goldNext;
+    state.goldNext = false;
+    els.table.classList.toggle('gold', gold);
+    if (gold) toast(I18N.t('gold.toast'));
+    updateBanner();
     els.stack.focus({ preventScroll: true });
   }
 
-  // 結果画面の「もう一度」：アプリでは 2 回に 1 回、全画面広告を挟む
+  // 結果画面の「もう一度」：アプリでは 2 回に 1 回、全画面広告を挟む（リワード広告を見た直後は挟まない）
   async function retry() {
-    if (window.Ads && Ads.available && state.finishes % 2 === 0) {
+    if (window.Ads && Ads.available && state.finishes % 2 === 0 && !state.skipInterstitial) {
       els.retryBtn.disabled = true;
       await Ads.showInterstitial();
       els.retryBtn.disabled = false;
     }
+    state.skipInterstitial = false;
     start();
+  }
+
+  // タイトルに戻るときと、一時停止から再開するときは、毎回全画面広告を挟む（タイマーは止まったまま）
+  let adBusy = false;
+  async function withInterstitial(next) {
+    if (adBusy) return;
+    adBusy = true;
+    try {
+      if (window.Ads && Ads.interstitialAvailable) await Ads.showInterstitial();
+    } finally {
+      adBusy = false;
+    }
+    next();
+  }
+
+  // バナーはタイトル・一時停止・結果画面のときだけ出す（プレイ中に連打する場所の近くには出さない）
+  function updateBanner() {
+    if (!window.Ads) return;
+    const overlayShown = [els.startOverlay, els.resultOverlay, els.pauseOverlay]
+      .some((el) => !el.classList.contains('hidden'));
+    Ads.setBanner(overlayShown);
+  }
+
+  // リワード広告：最後まで見ると、次の 1 回を金のお札で遊べる（タイムには影響しない）
+  function renderRewardButtons() {
+    const on = !!(window.Ads && Ads.rewardedAvailable);
+    [els.rewardStartBtn, els.rewardResultBtn].forEach((btn) => {
+      btn.classList.toggle('hidden', !on);
+      btn.disabled = false;
+      btn.dataset.i18n = 'reward.btn';
+      btn.textContent = I18N.t('reward.btn');
+    });
+  }
+
+  async function watchReward(btn) {
+    btn.disabled = true;
+    btn.dataset.i18n = 'reward.loading';
+    btn.textContent = I18N.t('reward.loading');
+    const result = await Ads.showRewarded();
+    if (result === 'rewarded') {
+      renderRewardButtons();
+      state.goldNext = true;
+      state.skipInterstitial = true;
+      start();
+      return;
+    }
+    btn.disabled = false;
+    btn.dataset.i18n = result === 'unavailable' ? 'reward.fail' : 'reward.btn';
+    btn.textContent = I18N.t(btn.dataset.i18n);
   }
 
   // 一時停止中はタイマーを止め、再開時にその分だけ開始時刻をずらす
@@ -482,6 +548,7 @@
     cancelAnimationFrame(state.rafId);
     suspendAudio();
     els.pauseOverlay.classList.remove('hidden');
+    updateBanner();
   }
 
   function resume() {
@@ -494,6 +561,7 @@
     }
     resumeAudio();
     els.pauseOverlay.classList.add('hidden');
+    updateBanner();
     els.stack.focus({ preventScroll: true });
   }
 
@@ -505,6 +573,9 @@
     renderBest();
     els.resultOverlay.classList.add('hidden');
     els.startOverlay.classList.remove('hidden');
+    els.table.classList.remove('gold');
+    renderRewardButtons();
+    updateBanner();
   }
 
   // ---------- 入力 ----------
@@ -542,8 +613,9 @@
   els.retryBtn.addEventListener('click', retry);
   els.shareCopy.addEventListener('click', copyShare);
   els.shareNative.addEventListener('click', nativeShare);
-  els.resumeBtn.addEventListener('click', resume);
-  els.quitBtn.addEventListener('click', backToTitle);
+  els.resumeBtn.addEventListener('click', () => withInterstitial(resume));
+  els.quitBtn.addEventListener('click', () => withInterstitial(backToTitle));
+  els.titleBtn.addEventListener('click', () => withInterstitial(backToTitle));
 
   // 別アプリやタブに切り替えたら自動で一時停止する
   document.addEventListener('visibilitychange', () => {
@@ -559,7 +631,7 @@
   if (plugin('App')) {
     plugin('App').addListener('backButton', () => {
       if (window.Ads && Ads.showing) return;
-      if (state.paused) resume();
+      if (state.paused) withInterstitial(resume);
       else if (state.playing) pause();
       else plugin('App').exitApp();
     });
@@ -583,7 +655,11 @@
   if (window.Ads) {
     Ads.initDone.then(() => { if (Ads.privacyOptionsRequired) els.adPrivacy.classList.remove('hidden'); });
     els.adPrivacy.addEventListener('click', () => Ads.showPrivacyOptions());
+    els.rewardStartBtn.addEventListener('click', () => watchReward(els.rewardStartBtn));
+    els.rewardResultBtn.addEventListener('click', () => watchReward(els.rewardResultBtn));
   }
+  renderRewardButtons();
+  updateBanner();
 
   document.querySelectorAll('[data-lang]').forEach((btn) => {
     btn.addEventListener('click', () => I18N.setLang(btn.dataset.lang));

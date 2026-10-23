@@ -4,6 +4,6 @@
     <string name="title_activity_main">100 Million Yen</string>
     <string name="package_name">jp.techgym.ichiokuen</string>
     <string name="custom_url_scheme">jp.techgym.ichiokuen</string>
-    <!-- Google AdMob のアプリ ID。本番のアプリ ID を受け取るまでは Google 公式のテスト用 ID -->
-    <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <!-- Google AdMob のアプリ ID -->
+    <string name="admob_app_id">ca-app-pub-6411535997477460~3135523040</string>
 </resources>

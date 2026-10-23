@@ -53,6 +53,10 @@ const I18N = (() => {
       'rank.2': '敏腕経理',
       'rank.3': '堅実な会計係',
       'rank.4': '1億円、確かに数えました',
+      'reward.btn': '▶ 広告を見て金のお札で遊ぶ',
+      'reward.loading': '広告を読み込み中…',
+      'reward.fail': '広告を読み込めませんでした',
+      'gold.toast': '金のお札でプレイ中！',
     },
     en: {
       'doc.title': '100 Million Yen',
@@ -106,6 +110,10 @@ const I18N = (() => {
       'rank.2': 'Sharp Accountant',
       'rank.3': 'Steady Bookkeeper',
       'rank.4': '¥100 million, counted!',
+      'reward.btn': '▶ Watch an ad to play with gold bills',
+      'reward.loading': 'Loading ad…',
+      'reward.fail': 'Could not load the ad',
+      'gold.toast': 'Playing with gold bills!',
     },
   };
 

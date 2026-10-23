@@ -78,7 +78,10 @@
         <li class="web-only" data-i18n-html="rule.esc"><kbd>Esc</kbd> でやり直し</li>
       </ul>
       <p class="best" id="bestStart"></p>
-      <button class="btn" id="startBtn" type="button" data-i18n="start.btn">スタート</button>
+      <div class="btn-row">
+        <button class="btn" id="startBtn" type="button" data-i18n="start.btn">スタート</button>
+        <button class="btn btn-reward hidden" id="rewardStartBtn" type="button" data-i18n="reward.btn">▶ 広告を見て金のお札で遊ぶ</button>
+      </div>
       <p class="legal">
         <a href="https://techgym.jp/privacy-policy/" data-i18n-href="url.privacy" data-i18n="legal.privacy" target="_blank" rel="noopener">プライバシーポリシー</a>
         <button class="link-btn hidden" id="adPrivacy" type="button" data-i18n="legal.adSettings">広告の設定</button>
@@ -123,6 +126,8 @@
       </div>
       <div class="btn-row">
         <button class="btn" id="retryBtn" type="button" data-i18n="retry">もう一度</button>
+        <button class="btn btn-reward hidden" id="rewardResultBtn" type="button" data-i18n="reward.btn">▶ 広告を見て金のお札で遊ぶ</button>
+        <button class="btn btn-quiet" id="titleBtn" type="button" data-i18n="pause.quit">タイトルへ</button>
       </div>
     </div>
   </div>

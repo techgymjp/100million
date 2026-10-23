@@ -27,7 +27,10 @@ Vercel では `vercel.json` の設定で `npm run build` を実行し、`www/` �
 - 画面の向き：横画面（`sensorLandscape`）。システムバーを隠した全画面で、プレイ中は画面が消えない
 - 戻るボタン：プレイ中は一時停止（一時停止中は再開）、タイトルや結果画面ではアプリを終了
 - シェア：Android の共有メニュー
-- 広告（AdMob）：結果画面で「もう一度」を押したとき、2 回に 1 回インタースティシャル広告
+- 広告（AdMob）
+  - バナー：タイトル・一時停止・結果画面の下端だけ（プレイ中は連打する場所の近くになるので出さない）
+  - インタースティシャル：タイトルに戻るとき・一時停止から再開するときは毎回、結果画面の「もう一度」では 2 回に 1 回
+  - リワード：最後まで見ると、次の 1 回を「金のお札」で遊べる（見た目だけで、タイムには影響しない）
 - 起動時に Google の同意確認（UMP）を実行し、必要な地域ではタイトル画面に「広告の設定」を表示
 
 ### ビルド
@@ -50,8 +53,7 @@ npm run android:open
 
 ### 本番公開の前に設定するもの
 
-- `android/app/src/main/res/values/strings.xml` の `admob_app_id`：いまは Google 公式のテスト用アプリ ID
-- `js/ads.js` の `UNITS.production.interstitial`：本番の広告ユニット ID（空のあいだ、Google Play 版では広告を出さない）
+- AdMob のアプリ ID は `android/app/src/main/res/values/strings.xml` の `admob_app_id`、広告ユニット ID は `js/ads.js` の `UNITS.production` に設定済み（動作確認用 APK は Google 公式のテスト広告）
 - GitHub Secrets：`ANDROID_KEYSTORE_BASE64` `ANDROID_KEYSTORE_PASSWORD` `ANDROID_KEY_ALIAS` `ANDROID_KEY_PASSWORD`
 
 ## ファイル構成
