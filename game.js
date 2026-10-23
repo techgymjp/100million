@@ -60,9 +60,7 @@
     playing: false,   // スタート画面を閉じて操作を受け付けている
     paused: false,
     pausedAt: 0,
-    finishes: 0,      // クリアした回数（広告の頻度に使う）
     goldNext: false,  // リワード広告を見た：次の 1 回は金のお札で遊べる
-    skipInterstitial: false,
     count: 0,
     startAt: 0,       // 最初の1枚をめくった時刻（0 なら未開始）
     endAt: 0,
@@ -366,7 +364,6 @@
   function finish(now) {
     state.endAt = now;
     state.playing = false;
-    state.finishes++;
     cancelAnimationFrame(state.rafId);
 
     const elapsed = state.endAt - state.startAt;
@@ -480,14 +477,13 @@
     els.stack.focus({ preventScroll: true });
   }
 
-  // 結果画面の「もう一度」：アプリでは 2 回に 1 回、全画面広告を挟む（リワード広告を見た直後は挟まない）
+  // 結果画面の「もう一度」：アプリでは毎回、全画面広告を挟む
   async function retry() {
-    if (window.Ads && Ads.available && state.finishes % 2 === 0 && !state.skipInterstitial) {
+    if (window.Ads && Ads.interstitialAvailable) {
       els.retryBtn.disabled = true;
       await Ads.showInterstitial();
       els.retryBtn.disabled = false;
     }
-    state.skipInterstitial = false;
     start();
   }
 
@@ -531,7 +527,6 @@
     if (result === 'rewarded') {
       renderRewardButtons();
       state.goldNext = true;
-      state.skipInterstitial = true;
       start();
       return;
     }
