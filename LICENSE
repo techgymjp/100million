@@ -37,7 +37,7 @@ is not permitted, and this copyright notice must be kept.
 
 Third-party software and materials
 
-This repository does not bundle any third-party libraries. The Android app uses Capacitor,
+This repository does not bundle any third-party libraries. The Android and iOS apps use Capacitor,
 @capacitor/app, @capacitor/share and @capacitor-community/admob (MIT License), installed
 from npm at build time.
 

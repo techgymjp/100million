@@ -1,6 +1,6 @@
 # 1億円
 
-1万円札を1万枚めくって、1億円を数えきるまでのタイムを競うゲームです（Web / Android）。
+1万円札を1万枚めくって、1億円を数えきるまでのタイムを競うゲームです（Web / Android / iOS）。
 
 ## 遊び方
 
@@ -56,6 +56,17 @@ npm run android:open
 - AdMob のアプリ ID は `android/app/src/main/res/values/strings.xml` の `admob_app_id`、広告ユニット ID は `js/ads.js` の `UNITS.production` に設定済み（動作確認用 APK は Google 公式のテスト広告）
 - GitHub Secrets：`ANDROID_KEYSTORE_BASE64` `ANDROID_KEYSTORE_PASSWORD` `ANDROID_KEY_ALIAS` `ANDROID_KEY_PASSWORD`
 
+## iOS 版
+
+Android 版と同じ Capacitor のプロジェクトに `ios/` を足しています。Mac での作業手順は `docs/IOS_BUILD.md` にあります。
+
+- Bundle ID：`jp.techgym.ichiokuen`（Android と同じ）／ Team ID `GNM3VTX9YG`
+- iPhone 専用・横画面固定。ホーム画面の名前は日本語の端末で「1億円」、それ以外で「100 Million Yen」
+- 広告：AdMob の iOS 用アプリと広告ユニット（`ios/App/App/Info.plist` の `GADApplicationIdentifier`、`js/ads.js` の `UNITS.ios`）。起動時に App Tracking Transparency の確認を行う
+- `npm run ios:sync`（テスト広告）／ `npm run ios:release`（本番広告。App Store 用）／ `npm run ios:open`
+- GitHub Actions（`.github/workflows/ios.yml`）で、push のたびに署名なしでシミュレーター向けにビルドできるかを確認する
+- App Store 用の画像と文章は `docs/store/ios/`
+
 ## ファイル構成
 
 ```
@@ -70,6 +81,7 @@ js/build-info.js       バージョン表示（ビルド時に生成）
 scripts/build-web.js   Web ファイルを www/ にコピー
 capacitor.config.json  Capacitor の設定
 android/               Android プロジェクト
+ios/                   iOS プロジェクト
 assets/                アイコン・起動画面の元画像
 ```
 
