@@ -24,7 +24,7 @@ const Ads = (() => {
       },
       // iOS 用の広告ユニット（AdMob で iOS アプリを追加したら設定する）
       production: {
-        banner: '',
+        banner: 'ca-app-pub-6411535997477460/2187658488',
         interstitial: '',
         rewarded: '',
       },
