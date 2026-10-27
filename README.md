@@ -62,7 +62,7 @@ Android 版と同じ Capacitor のプロジェクトに `ios/` を足してい�
 
 - Bundle ID：`jp.techgym.ichiokuen`（Android と同じ）／ Team ID `GNM3VTX9YG`
 - iPhone 専用・横画面固定。ホーム画面の名前は日本語の端末で「1億円」、それ以外で「100 Million Yen」
-- 広告：AdMob の iOS 用アプリと広告ユニット（`ios/App/App/Info.plist` の `GADApplicationIdentifier`、`js/ads.js` の `UNITS.ios`）。起動時に App Tracking Transparency の確認を行う
+- 広告：AdMob の iOS 用アプリと広告ユニット（`ios/App/App/Info.plist` の `GADApplicationIdentifier`、`js/ads.js` の `UNITS.ios`。設定済み）。起動時に App Tracking Transparency の確認を行う
 - `npm run ios:sync`（テスト広告）／ `npm run ios:release`（本番広告。App Store 用）／ `npm run ios:open`
 - GitHub Actions（`.github/workflows/ios.yml`）で、push のたびに署名なしでシミュレーター向けにビルドできるかを確認する
 - App Store 用の画像と文章は `docs/store/ios/`

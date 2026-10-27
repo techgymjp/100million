@@ -25,7 +25,7 @@
    - アプリ ID と広告ユニット ID を Claude Code に渡す（`ios/App/App/Info.plist` の `GADApplicationIdentifier` と `js/ads.js` の `UNITS.ios.production` に入れてもらう）
    - 「プライバシーとメッセージ」→「欧州の規制」のメッセージに iOS アプリも追加する
 
-**AdMob の iOS 用 ID が入るまでは、Google 公式のテスト用アプリ ID で動きます。App Store 用のビルド（3 章）は、ID を入れてから行ってください。**
+**1億円では、AdMob の iOS 用アプリ ID と広告ユニット（バナー・インタースティシャル・リワード）を設定済みです。**
 
 ---
 
