@@ -219,7 +219,16 @@ base64 -i 証明書.p12 | tr -d '\n' | pbcopy
 base64 -i AuthKey_XXXXXXXXXX.p8 | tr -d '\n' | pbcopy
 ```
 
-登録が終わったら、Claude Code に「iOS の自動アップロードのワークフローを作って」と頼みます。
+### 自動アップロード（`.github/workflows/ios-release.yml`、設定済み）
+
+既定ブランチにゲームのファイルを push すると、GitHub Actions（GitHub の Mac 環境）が次を行います。
+
+1. 本番の広告 ID でゲームのファイルをコピーする（`ios:release` と同じ）
+2. 証明書を一時的なキーチェーンに読み込み、App Store Connect API で App Store 用のプロファイルを用意する（同じ Bundle ID・証明書のものがあれば使い回す。`scripts/ios-profile.js`）
+3. ビルド番号を「Actions の実行回数 + 100」にして Archive し、App Store Connect にアップロードする（Mac から手で上げるビルド 1, 2, 3… と重ならない）
+
+10〜30 分ほどで TestFlight に表示されます。審査への提出は、これまでどおり App Store Connect で行います。
+アップロードの前に、App Store Connect でアプリ（0 章の 2）を作っておく必要があります。Actions の「iOS release (TestFlight)」→「Run workflow」で、手動で実行することもできます。
 
 **注意**：証明書（.p12）、そのパスワード、API キー（.p8）は、チャット・AI へのアップロード・リポジトリへのコミットで**絶対に共有しない**でください。
 
