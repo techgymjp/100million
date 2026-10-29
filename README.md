@@ -20,6 +20,9 @@ Vercel では `vercel.json` の設定で `npm run build` を実行し、`www/` �
 
 ## Android 版
 
+**Google Play で公開中**：https://play.google.com/store/apps/details?id=jp.techgym.ichiokuen
+Web 版のタイトル画面と結果画面に、Google Play のバッジ（`images/badges/`、Google 公式の画像）を表示しています（アプリ版では表示しない）。
+
 [Capacitor](https://capacitorjs.com/) でゲームのファイルをアプリに同梱しています（オフラインで遊べます）。
 
 - パッケージ名：`jp.techgym.ichiokuen`

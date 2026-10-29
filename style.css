@@ -714,3 +714,20 @@ html[lang="en"] .sample {
   from { background-position: 150% 0; }
   to { background-position: -100% 0; }
 }
+
+/* ---------- アプリ版へのリンク（Web 版だけ） ---------- */
+.store-links {
+  margin: 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.store-label { font-size: 12px; color: #6b6252; }
+.store-badge { display: inline-block; line-height: 0; }
+.store-badge img { height: 48px; width: auto; }
+
+@media (orientation: landscape) and (max-height: 540px) {
+  .store-links { margin-top: 6px; }
+  .store-badge img { height: 38px; }
+}

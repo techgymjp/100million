@@ -31,6 +31,10 @@ const I18N = (() => {
       'legal.privacy': 'プライバシーポリシー',
       'legal.adSettings': '広告の設定',
       'url.privacy': 'https://techgym.jp/privacy-policy/',
+      'url.play': 'https://play.google.com/store/apps/details?id=jp.techgym.ichiokuen&hl=ja',
+      'img.play': 'images/badges/google-play-ja.png',
+      'alt.play': 'Google Play で手に入れよう',
+      'store.label': 'アプリ版',
       'pause.title': '一時停止中',
       'pause.lead': 'タイマーは止まっています。',
       'pause.resume': '再開',
@@ -88,6 +92,10 @@ const I18N = (() => {
       'legal.privacy': 'Privacy Policy',
       'legal.adSettings': 'Ad settings',
       'url.privacy': 'https://techgym.jp/privacy-policy-en/',
+      'url.play': 'https://play.google.com/store/apps/details?id=jp.techgym.ichiokuen&hl=en',
+      'img.play': 'images/badges/google-play-en.png',
+      'alt.play': 'Get it on Google Play',
+      'store.label': 'Get the app',
       'pause.title': 'Paused',
       'pause.lead': 'The timer is stopped.',
       'pause.resume': 'Resume',
@@ -133,7 +141,7 @@ const I18N = (() => {
   }
 
   // data-i18n（文字）/ data-i18n-html（タグを含む）/ data-i18n-href（リンク先）/
-  // data-i18n-aria（aria-label）/ data-i18n-alt（代替テキスト）の付いた要素を書き換える
+  // data-i18n-aria（aria-label）/ data-i18n-alt（代替テキスト）/ data-i18n-src（画像）の付いた要素を書き換える
   function apply(root) {
     const scope = root || document;
     if (!root) {
@@ -145,6 +153,7 @@ const I18N = (() => {
     scope.querySelectorAll('[data-i18n-href]').forEach((el) => { el.href = t(el.dataset.i18nHref); });
     scope.querySelectorAll('[data-i18n-aria]').forEach((el) => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
     scope.querySelectorAll('[data-i18n-alt]').forEach((el) => { el.alt = t(el.dataset.i18nAlt); });
+    scope.querySelectorAll('[data-i18n-src]').forEach((el) => { el.src = t(el.dataset.i18nSrc); });
     scope.querySelectorAll('[data-lang]').forEach((el) => el.classList.toggle('on', el.dataset.lang === lang));
   }
 
