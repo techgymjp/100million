@@ -731,3 +731,4 @@ html[lang="en"] .sample {
   .store-links { margin-top: 6px; }
   .store-badge img { height: 38px; }
 }
+.footer .trademark { display: block; margin-top: 2px; opacity: 0.8; }
