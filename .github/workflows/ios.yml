@@ -40,7 +40,7 @@ jobs:
 
       - name: Copy web assets into the iOS project
         run: |
-          npm run build
+          npm run build:app
           npx cap sync ios
 
       # 既定のシェルは pipefail なしなので、xcodebuild の失敗が tail で隠れないように付ける

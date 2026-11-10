@@ -18,6 +18,8 @@
 ビルド不要の静的サイトです。`index.html` をブラウザで開けば遊べます。
 Vercel では `vercel.json` の設定で `npm run build` を実行し、`www/` を公開します。
 
+アプリ（Android / iOS）は `npm run build:app` で `www/` を作ります。Web 版だけの部分（Google Play のバッジと商標表記。`index.html` の `<!-- web-only -->` 〜 `<!-- /web-only -->` と、`js/i18n.js` の `// web-only` の行）は、アプリに同梱するファイルから取り除きます（CSS で隠すだけにしない。App Store の審査で「隠された機能」とみなされないようにするため）。
+
 ## Android 版
 
 **Google Play で公開中**：https://play.google.com/store/apps/details?id=jp.techgym.ichiokuen

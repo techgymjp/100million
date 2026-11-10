@@ -54,7 +54,7 @@ jobs:
       # App Store 用なので本番の広告 ID を使う
       - name: Copy web assets into the iOS project (production ads)
         run: |
-          ADMOB_MODE=production npm run build
+          ADMOB_MODE=production npm run build:app
           npx cap sync ios
 
       - name: Import the distribution certificate

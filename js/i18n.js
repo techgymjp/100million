@@ -31,11 +31,11 @@ const I18N = (() => {
       'legal.privacy': 'プライバシーポリシー',
       'legal.adSettings': '広告の設定',
       'url.privacy': 'https://techgym.jp/privacy-policy/',
-      'url.play': 'https://play.google.com/store/apps/details?id=jp.techgym.ichiokuen&hl=ja',
-      'img.play': 'images/badges/google-play-ja.png',
-      'alt.play': 'Google Play で手に入れよう',
-      'store.label': 'アプリ版',
-      'legal.gplay': 'Google Play および Google Play ロゴは Google LLC の商標です。',
+      'url.play': 'https://play.google.com/store/apps/details?id=jp.techgym.ichiokuen&hl=ja', // web-only
+      'img.play': 'images/badges/google-play-ja.png', // web-only
+      'alt.play': 'Google Play で手に入れよう', // web-only
+      'store.label': 'アプリ版', // web-only
+      'legal.gplay': 'Google Play および Google Play ロゴは Google LLC の商標です。', // web-only
       'pause.title': '一時停止中',
       'pause.lead': 'タイマーは止まっています。',
       'pause.resume': '再開',
@@ -93,11 +93,11 @@ const I18N = (() => {
       'legal.privacy': 'Privacy Policy',
       'legal.adSettings': 'Ad settings',
       'url.privacy': 'https://techgym.jp/privacy-policy-en/',
-      'url.play': 'https://play.google.com/store/apps/details?id=jp.techgym.ichiokuen&hl=en',
-      'img.play': 'images/badges/google-play-en.png',
-      'alt.play': 'Get it on Google Play',
-      'store.label': 'Get the app',
-      'legal.gplay': 'Google Play and the Google Play logo are trademarks of Google LLC.',
+      'url.play': 'https://play.google.com/store/apps/details?id=jp.techgym.ichiokuen&hl=en', // web-only
+      'img.play': 'images/badges/google-play-en.png', // web-only
+      'alt.play': 'Get it on Google Play', // web-only
+      'store.label': 'Get the app', // web-only
+      'legal.gplay': 'Google Play and the Google Play logo are trademarks of Google LLC.', // web-only
       'pause.title': 'Paused',
       'pause.lead': 'The timer is stopped.',
       'pause.resume': 'Resume',
