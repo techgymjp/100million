@@ -28,5 +28,14 @@ if (app) {
   strip('index.html', /[ \t]*<!-- web-only -->[\s\S]*?<!-- \/web-only -->\n?/g);
   strip('js/i18n.js', /^.*\/\/ web-only\n/gm);
   fs.rmSync(path.join(out, 'images', 'badges'), { recursive: true, force: true });
+  // 取り除き忘れがあればビルドを止める（他社ストアへのリンクが残ると App Store の審査で問題になる）
+  for (const file of ['index.html', 'game.js', 'js/i18n.js']) {
+    const text = fs.readFileSync(path.join(out, file), 'utf8');
+    const left = ['play.google.com', 'Google Play', 'web-only -->'].filter((w) => text.includes(w));
+    if (left.length) {
+      console.error(`アプリ用の ${file} に Web 版だけの部分が残っている：${left.join(', ')}`);
+      process.exit(1);
+    }
+  }
 }
 console.log(`built ${app ? 'app' : 'web'} assets into www/ (ads: ${mode}, version: ${version})`);
