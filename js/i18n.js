@@ -16,17 +16,17 @@ const I18N = (() => {
       'stat.speedUnit': ' 枚/秒',
       'bundles.label': '帯封（100万円束）',
       'bundles.of': ' / 100束',
-      'hint.web': 'お札をタップ / クリック、またはスペースキーでめくる',
+      'hint.web': 'お札をタップ / クリック、またはスペースキーでめくる', // web-only
       'hint.app': 'お札をタップしてめくる',
       'hint.go': 'その調子！ どんどんめくろう',
-      'rotate.text': 'スマホを<b>横向き</b>にすると<br>お札が大きくなって迫力アップ！',
-      'rotate.skip': '縦のまま遊ぶ',
+      'rotate.text': 'スマホを<b>横向き</b>にすると<br>お札が大きくなって迫力アップ！', // web-only
+      'rotate.skip': '縦のまま遊ぶ', // web-only
       'start.lead': '1万円札を<b>1万枚</b>めくって、<br>1億円を数えきるタイムを競おう。',
-      'rule.tap': 'お札をタップ / クリック、または <kbd>Space</kbd> <kbd>Enter</kbd> <kbd>F</kbd> <kbd>J</kbd> キーで1枚めくる',
+      'rule.tap': 'お札をタップ / クリック、または <kbd>Space</kbd> <kbd>Enter</kbd> <kbd>F</kbd> <kbd>J</kbd> キーで1枚めくる', // web-only
       'rule.tapApp': 'お札をタップして1枚めくる',
       'rule.timer': '最初の1枚をめくった瞬間にタイマースタート',
-      'rule.repeat': 'キーの押しっぱなし（連打機能）は無効',
-      'rule.esc': '<kbd>Esc</kbd> でやり直し',
+      'rule.repeat': 'キーの押しっぱなし（連打機能）は無効', // web-only
+      'rule.esc': '<kbd>Esc</kbd> でやり直し', // web-only
       'start.btn': 'スタート',
       'legal.privacy': 'プライバシーポリシー',
       'legal.adSettings': '広告の設定',
@@ -45,8 +45,8 @@ const I18N = (() => {
       'result.newBest': '自己ベスト更新！ ',
       'best': '自己ベスト：{t}',
       'share.label': '結果をシェアする',
-      'share.copy': 'コピー',
-      'share.copied': 'コピーしました',
+      'share.copy': 'コピー', // web-only
+      'share.copied': 'コピーしました', // web-only
       'share.native': '結果をシェアする',
       'share.title': '1億円',
       'share.dialog': '結果をシェア',
@@ -78,17 +78,17 @@ const I18N = (() => {
       'stat.speedUnit': ' bills/s',
       'bundles.label': 'Bundles (¥1,000,000 each)',
       'bundles.of': ' / 100',
-      'hint.web': 'Tap / click the bill, or press Space to flip',
+      'hint.web': 'Tap / click the bill, or press Space to flip', // web-only
       'hint.app': 'Tap the bill to flip',
       'hint.go': 'Keep going! Flip, flip, flip!',
-      'rotate.text': 'Turn your phone <b>sideways</b><br>for bigger bills and more thrill!',
-      'rotate.skip': 'Keep playing in portrait',
+      'rotate.text': 'Turn your phone <b>sideways</b><br>for bigger bills and more thrill!', // web-only
+      'rotate.skip': 'Keep playing in portrait', // web-only
       'start.lead': 'Flip <b>10,000</b> ¥10,000 bills<br>and count ¥100 million as fast as you can.',
-      'rule.tap': 'Tap / click the bill, or press <kbd>Space</kbd> <kbd>Enter</kbd> <kbd>F</kbd> <kbd>J</kbd> to flip one bill',
+      'rule.tap': 'Tap / click the bill, or press <kbd>Space</kbd> <kbd>Enter</kbd> <kbd>F</kbd> <kbd>J</kbd> to flip one bill', // web-only
       'rule.tapApp': 'Tap the bill to flip one bill',
       'rule.timer': 'The timer starts when you flip the first bill',
-      'rule.repeat': 'Holding a key down (auto-repeat) does not count',
-      'rule.esc': 'Press <kbd>Esc</kbd> to start over',
+      'rule.repeat': 'Holding a key down (auto-repeat) does not count', // web-only
+      'rule.esc': 'Press <kbd>Esc</kbd> to start over', // web-only
       'start.btn': 'Start',
       'legal.privacy': 'Privacy Policy',
       'legal.adSettings': 'Ad settings',
@@ -107,8 +107,8 @@ const I18N = (() => {
       'result.newBest': 'New personal best! ',
       'best': 'Personal best: {t}',
       'share.label': 'Share your result',
-      'share.copy': 'Copy',
-      'share.copied': 'Copied',
+      'share.copy': 'Copy', // web-only
+      'share.copied': 'Copied', // web-only
       'share.native': 'Share your result',
       'share.title': '100 Million Yen',
       'share.dialog': 'Share your result',

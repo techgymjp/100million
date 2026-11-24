@@ -732,3 +732,5 @@ html[lang="en"] .sample {
   .store-badge img { height: 38px; }
 }
 .footer .trademark { display: block; margin-top: 2px; opacity: 0.8; }
+/* アプリ版だけに出す部分（Web 版では出さない。アプリ用のビルドに Web 版だけの部分は含めない） */
+body:not(.native) .app-only { display: none !important; }

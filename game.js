@@ -36,18 +36,18 @@
     resultRank: $('resultRank'),
     bestResult: $('bestResult'),
     retryBtn: $('retryBtn'),
+    // web-only:start
     shareX: $('shareX'),
     shareLine: $('shareLine'),
     shareFb: $('shareFb'),
     shareCopy: $('shareCopy'),
-    muteBtn: $('muteBtn'),
     rotateSkip: $('rotateSkip'),
-    shareRow: $('shareRow'),
+    // web-only:end
+    muteBtn: $('muteBtn'),
     shareNative: $('shareNative'),
     pauseOverlay: $('pauseOverlay'),
     resumeBtn: $('resumeBtn'),
     quitBtn: $('quitBtn'),
-    ruleTap: $('ruleTap'),
     buildInfo: $('buildInfo'),
     adPrivacy: $('adPrivacy'),
     table: $('table'),
@@ -393,10 +393,12 @@
   function setShareLinks(text) {
     shareText = text;
     const enc = encodeURIComponent;
+    // web-only:start
     els.shareX.href = `https://x.com/intent/post?text=${enc(text)}&url=${enc(SHARE_URL)}`;
     els.shareLine.href = `https://social-plugins.line.me/lineit/share?url=${enc(SHARE_URL)}&text=${enc(text)}`;
     els.shareFb.href = `https://www.facebook.com/sharer/sharer.php?u=${enc(SHARE_URL)}`;
     els.shareCopy.textContent = I18N.t('share.copy');
+    // web-only:end
   }
 
   // アプリでは Android の共有メニューを出す
@@ -408,6 +410,7 @@
     } catch (_) { /* キャンセル */ }
   }
 
+  // web-only:start
   async function copyShare() {
     const body = `${shareText}\n${SHARE_URL}`;
     try {
@@ -422,6 +425,7 @@
     }
     els.shareCopy.textContent = I18N.t('share.copied');
   }
+  // web-only:end
 
   // ヒントは言語を切り替えたときに書き直せるよう、キーで持つ
   function setHint(key) {
@@ -444,6 +448,7 @@
     renderCount();
   }
 
+  // web-only:start
   // スマホでは全画面＋横向き固定を試みる（対応ブラウザのみ。iOS Safari などは無視される）
   const isTouch = window.matchMedia('(pointer: coarse)').matches;
   function enterLandscape() {
@@ -457,9 +462,12 @@
         .catch(() => { /* noop */ });
     } catch (_) { /* noop */ }
   }
+  // web-only:end
 
   function start() {
+    // web-only:start
     enterLandscape();
+    // web-only:end
     initAudio();
     resumeAudio();
     reset();
@@ -574,7 +582,9 @@
   }
 
   // ---------- 入力 ----------
+  // web-only:start
   const FLIP_KEYS = new Set(['Space', 'Enter', 'NumpadEnter', 'KeyF', 'KeyJ']);
+  // web-only:end
 
   els.stack.addEventListener('pointerdown', (e) => {
     if (!e.isTrusted) return; // スクリプトからの疑似イベントは無効
@@ -583,6 +593,7 @@
     flip();
   });
 
+  // web-only:start
   document.addEventListener('keydown', (e) => {
     if (e.code === 'Escape') {
       if (state.playing || !els.resultOverlay.classList.contains('hidden')) backToTitle();
@@ -600,13 +611,16 @@
     if (e.repeat || !e.isTrusted) return; // 押しっぱなし・疑似イベントは無効
     flip();
   });
+  // web-only:end
 
   // 長押しメニューやダブルタップズームを抑止
   els.stack.addEventListener('contextmenu', (e) => e.preventDefault());
 
   els.startBtn.addEventListener('click', start);
   els.retryBtn.addEventListener('click', retry);
+  // web-only:start
   els.shareCopy.addEventListener('click', copyShare);
+  // web-only:end
   els.shareNative.addEventListener('click', nativeShare);
   els.resumeBtn.addEventListener('click', () => withInterstitial(resume));
   els.quitBtn.addEventListener('click', () => withInterstitial(backToTitle));
@@ -632,7 +646,9 @@
     });
   }
 
+  // web-only:start
   els.rotateSkip.addEventListener('click', () => document.body.classList.add('portrait-ok'));
+  // web-only:end
 
   els.muteBtn.addEventListener('click', () => {
     state.muted = !state.muted;
@@ -641,11 +657,6 @@
   });
 
   // ---------- 初期化 ----------
-  if (NATIVE) {
-    els.ruleTap.dataset.i18nHtml = 'rule.tapApp';
-    els.shareRow.classList.add('hidden');
-    els.shareNative.classList.remove('hidden');
-  }
   if (window.APP_VERSION && window.APP_VERSION !== 'dev') els.buildInfo.textContent = window.APP_VERSION;
   if (window.Ads) {
     Ads.initDone.then(() => { if (Ads.privacyOptionsRequired) els.adPrivacy.classList.remove('hidden'); });

@@ -60,11 +60,13 @@
   </section>
 
   <!-- 縦向きスマホ向け：横向きのすすめ -->
+  <!-- web-only -->
   <div class="rotate-hint" id="rotateHint">
     <div class="rotate-phone" aria-hidden="true"><span></span></div>
     <p data-i18n-html="rotate.text">スマホを<b>横向き</b>にすると<br>お札が大きくなって迫力アップ！</p>
     <button class="rotate-skip" id="rotateSkip" type="button" data-i18n="rotate.skip">縦のまま遊ぶ</button>
   </div>
+  <!-- /web-only -->
 
   <!-- スタート画面 -->
   <div class="overlay" id="startOverlay">
@@ -72,10 +74,15 @@
       <h2 data-i18n="title">1億円</h2>
       <p class="lead" data-i18n-html="start.lead">1万円札を<b>1万枚</b>めくって、<br>1億円を数えきるタイムを競おう。</p>
       <ul class="rules">
-        <li id="ruleTap" data-i18n-html="rule.tap">お札をタップ / クリック、または <kbd>Space</kbd> <kbd>Enter</kbd> <kbd>F</kbd> <kbd>J</kbd> キーで1枚めくる</li>
+        <!-- web-only -->
+        <li class="web-only" data-i18n-html="rule.tap">お札をタップ / クリック、または <kbd>Space</kbd> <kbd>Enter</kbd> <kbd>F</kbd> <kbd>J</kbd> キーで1枚めくる</li>
+        <!-- /web-only -->
+        <li class="app-only" data-i18n="rule.tapApp">お札をタップして1枚めくる</li>
         <li data-i18n="rule.timer">最初の1枚をめくった瞬間にタイマースタート</li>
+        <!-- web-only -->
         <li class="web-only" data-i18n="rule.repeat">キーの押しっぱなし（連打機能）は無効</li>
         <li class="web-only" data-i18n-html="rule.esc"><kbd>Esc</kbd> でやり直し</li>
+        <!-- /web-only -->
       </ul>
       <p class="best" id="bestStart"></p>
       <div class="btn-row">
@@ -122,13 +129,15 @@
       <p class="best" id="bestResult"></p>
       <div class="share">
         <p class="share-label" data-i18n="share.label">結果をシェアする</p>
+        <!-- web-only -->
         <div class="share-row" id="shareRow">
           <a class="share-btn share-x" id="shareX" href="#" target="_blank" rel="noopener">X</a>
           <a class="share-btn share-line" id="shareLine" href="#" target="_blank" rel="noopener">LINE</a>
           <a class="share-btn share-fb" id="shareFb" href="#" target="_blank" rel="noopener">Facebook</a>
           <button class="share-btn share-copy" id="shareCopy" type="button" data-i18n="share.copy">コピー</button>
         </div>
-        <button class="share-btn share-native hidden" id="shareNative" type="button" data-i18n="share.native">結果をシェアする</button>
+        <!-- /web-only -->
+        <button class="share-btn share-native app-only" id="shareNative" type="button" data-i18n="share.native">結果をシェアする</button>
       </div>
       <div class="btn-row">
         <button class="btn" id="retryBtn" type="button" data-i18n="retry">もう一度</button>

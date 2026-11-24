@@ -18,7 +18,7 @@
 ビルド不要の静的サイトです。`index.html` をブラウザで開けば遊べます。
 Vercel では `vercel.json` の設定で `npm run build` を実行し、`www/` を公開します。
 
-アプリ（Android / iOS）は `npm run build:app` で `www/` を作ります。Web 版だけの部分（Google Play のバッジと商標表記。`index.html` の `<!-- web-only -->` 〜 `<!-- /web-only -->` と、`js/i18n.js` の `// web-only` の行）は、アプリに同梱するファイルから取り除きます（CSS で隠すだけにしない。App Store の審査で「隠された機能」とみなされないようにするため）。
+アプリ（Android / iOS）は `npm run build:app` で `www/` を作ります。Web 版だけの部分（Google Play のバッジと商標表記、キーボード操作とその説明、X / LINE / Facebook / コピーのシェアボタン、横向きのすすめと全画面化。`index.html` の `<!-- web-only -->` 〜 `<!-- /web-only -->`、`game.js` の `// web-only:start` 〜 `// web-only:end`、`js/i18n.js` の `// web-only` の行）は、アプリに同梱するファイルから取り除きます（CSS で隠すだけにしない。App Store の審査で「隠された機能」とみなされないようにするため）。アプリだけに出す部分には `app-only` のクラスを付ける。
 
 ## Android 版
 
